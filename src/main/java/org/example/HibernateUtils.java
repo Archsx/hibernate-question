@@ -12,7 +12,12 @@ public class HibernateUtils {
 
     static {
 
-        Configuration conf = new Configuration().configure();
+        Configuration conf = new Configuration();
+        conf.addAnnotatedClass(Post.class);
+        conf.addAnnotatedClass(PostComment.class);
+        conf.addAnnotatedClass(Post1.class);
+        conf.addAnnotatedClass(PostComment1.class);
+        conf.configure();
 
         sf = conf.buildSessionFactory();
     }

@@ -3,44 +3,46 @@ package org.example;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
+import java.io.Serializable;
+
 
 public class Main {
     public static void main(String[] args) {
         Session session = HibernateUtils.openSession();
         Transaction tx = session.beginTransaction();
 
-        Customer customer1 = new Customer();
-        customer1.setCust_name("li");
+        Post post = new Post();
+        post.setTitle("First post");
+        post.getComments().add(new PostComment("My first review"));
+        post.getComments().add(new PostComment("My second review"));
+        post.getComments().add(new PostComment("My third review"));
 
-        Customer customer2 = new Customer();
-        customer2.setCust_name("hua");
+        Serializable postId = session.save(post);
+
+        Post queriedPostFromDB = session.get(Post.class, postId);
+        queriedPostFromDB.getComments().remove(0);
+
+//        post.getComments().remove(0);
+
+//        System.out.println("---------" + post.getId());
 
 
-        LinkMan linkMan1 = new LinkMan();
-        linkMan1.setLkm_name("ruhua");
-
-        LinkMan linkMan2 = new LinkMan();
-        linkMan2.setLkm_name("fengjie");
-
-
-        LinkMan linkMan3 = new LinkMan();
-        linkMan3.setLkm_name("wangcai");
-
-        linkMan1.setCustomer(customer1);
-        linkMan2.setCustomer(customer1);
-        linkMan3.setCustomer(customer2);
-
-        customer1.getLinkMans().add(linkMan1);
-        customer1.getLinkMans().add(linkMan2);
-
-        customer2.getLinkMans().add(linkMan3);
-
-        session.save(customer1);
-        session.save(customer2);
-
-        session.save(linkMan1);
-        session.save(linkMan2);
-        session.save(linkMan3);
+//        Post1 post1 = new Post1();
+//        post1.setTitle("first post1");
+//
+//
+//        post1.addComment(new PostComment1("My first review1"));
+//        post1.addComment(new PostComment1("My first review2"));
+//        post1.addComment(new PostComment1("My first review3"));
+//
+//
+//        Serializable post1Id = session.save(post1);
+//
+//
+//        Post1 post11 = session.get(Post1.class, post1Id);
+//        PostComment1 postComment1 = post11.getComments().get(0);
+//
+//        post11.removeComment(postComment1);
 
 
         tx.commit();
